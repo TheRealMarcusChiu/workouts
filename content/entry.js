@@ -9,7 +9,7 @@ window.CP_ENTRIES = [
       "Muscle-up"
     ],
     "title": "First muscle-up",
-    "notes": "The one I chased for two years. Ugly, kipped, but clean enough to count. Bar to hips.",
+    "notes": "Ugly, kipped, but clean enough to count. Bar to hips.",
     "media": [
       {
         "t": "photo",
