@@ -13,6 +13,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { execFile } = require('child_process');
 
 const ROOT = __dirname;
 const MEDIA_DIR = path.join(ROOT, 'content', 'media');
@@ -28,6 +29,50 @@ const MIME = {
   '.mov': 'video/quicktime', '.ico': 'image/x-icon', '.txt': 'text/plain',
   '.woff': 'font/woff', '.woff2': 'font/woff2'
 };
+
+// --- Auto-sync ./content to git ---------------------------------------------
+// After any change under ./content, commit and push. Saves are debounced and
+// serialized so a burst (e.g. a media upload + an entries save) coalesces into
+// one push and concurrent git invocations never collide.
+const GIT_DEBOUNCE_MS = 2000;
+let gitTimer = null;
+let gitRunning = false;
+let gitPending = false;
+
+function run(cmd, args) {
+  return new Promise((resolve, reject) => {
+    execFile(cmd, args, { cwd: ROOT }, (err, stdout, stderr) =>
+      err ? reject(Object.assign(err, { stdout, stderr })) : resolve(stdout));
+  });
+}
+
+async function syncContent() {
+  if (gitRunning) { gitPending = true; return; }
+  gitRunning = true;
+  try {
+    await run('git', ['add', 'content']);
+    // Nothing staged? Skip the commit/push entirely.
+    try {
+      await run('git', ['diff', '--cached', '--quiet', '--', 'content']);
+      return; // exit code 0 => no staged changes
+    } catch (_) { /* non-zero => there are staged changes, continue */ }
+
+    const stamp = new Date().toISOString();
+    await run('git', ['commit', '-m', 'Update content (' + stamp + ')']);
+    await run('git', ['push']);
+    console.log('content synced → git (' + stamp + ')');
+  } catch (e) {
+    console.error('git sync failed:', (e.stderr || e.message || e).toString().trim());
+  } finally {
+    gitRunning = false;
+    if (gitPending) { gitPending = false; scheduleSync(); }
+  }
+}
+
+function scheduleSync() {
+  clearTimeout(gitTimer);
+  gitTimer = setTimeout(syncContent, GIT_DEBOUNCE_MS);
+}
 
 function send(res, code, body, type) {
   res.writeHead(code, { 'Content-Type': type || 'text/plain', 'Access-Control-Allow-Origin': '*' });
@@ -73,7 +118,7 @@ const server = http.createServer((req, res) => {
     let b = '';
     req.on('data', c => { b += c; if (b.length > 5e7) req.destroy(); });
     req.on('end', () => {
-      try { const arr = JSON.parse(b); writeEntries(arr); console.log('saved ' + arr.length + ' entries → content/entry.js'); send(res, 200, '{"ok":true}', 'application/json'); }
+      try { const arr = JSON.parse(b); writeEntries(arr); console.log('saved ' + arr.length + ' entries → content/entry.js'); scheduleSync(); send(res, 200, '{"ok":true}', 'application/json'); }
       catch (e) { console.error('save failed:', e.message); send(res, 400, '{"ok":false}', 'application/json'); }
     });
     return;
@@ -89,6 +134,7 @@ const server = http.createServer((req, res) => {
         fs.mkdirSync(MEDIA_DIR, { recursive: true });
         fs.writeFileSync(path.join(MEDIA_DIR, name), Buffer.concat(chunks));
         console.log('saved upload → content/media/' + name);
+        scheduleSync();
         send(res, 200, JSON.stringify({ url: './content/media/' + name }), 'application/json');
       } catch (e) { send(res, 500, '{"ok":false}', 'application/json'); }
     });
