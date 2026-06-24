@@ -1,0 +1,9 @@
+{
+  "name": "calisthenics-progress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Calisthenics training log — notebook UI with a tiny Node server that persists edits to content/entry.js and content/media/.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

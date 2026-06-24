@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #100d08; }
+    * { box-sizing: border-box; }
+    ::selection { background: rgba(231,173,77,0.22); color: #f3e9d6; }
+    @keyframes nbRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes cpStamp { 0% { opacity: 0; transform: scale(1.9) rotate(-30deg); } 16% { opacity: 0.95; transform: scale(0.94) rotate(-14deg); } 24% { transform: scale(1.05) rotate(-14deg); } 32% { transform: scale(1) rotate(-14deg); } 82% { opacity: 0.92; transform: scale(1) rotate(-14deg); } 100% { opacity: 0; transform: scale(1) rotate(-14deg); } }
+    @keyframes cpFlash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes cpBeast { 0% { opacity: 0; transform: scale(0.6) translateY(24px); } 18% { opacity: 1; transform: scale(1.06) translateY(0); } 28% { transform: scale(1) translateY(0); } 80% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes cpFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(112vh) rotate(720deg); opacity: 0.85; } }
+    @keyframes cpTear { 0% { opacity: 0; transform: rotate(-5deg) scale(0.45) translateY(30px); clip-path: polygon(0% 6%, 8% 1%, 16% 7%, 25% 2%, 34% 8%, 43% 2%, 52% 7%, 61% 1%, 70% 8%, 79% 2%, 88% 7%, 96% 1%, 100% 6%, 100% 100%, 0% 100%); } 60% { opacity: 1; clip-path: polygon(0% 1.6%, 8% 0.4%, 16% 1.6%, 25% 0.4%, 34% 1.8%, 43% 0.4%, 52% 1.6%, 61% 0.4%, 70% 1.8%, 79% 0.4%, 88% 1.6%, 96% 0.4%, 100% 1.4%, 100% 100%, 0% 100%); } 100% { opacity: 1; transform: rotate(0deg) scale(1) translateY(0); clip-path: polygon(0% 0%, 8% 0%, 16% 0%, 25% 0%, 34% 0%, 43% 0%, 52% 0%, 61% 0%, 70% 0%, 79% 0%, 88% 0%, 96% 0%, 100% 0%, 100% 100%, 0% 100%); } }
+    @keyframes cpPop { 0% { opacity: 0; transform: scale(0.6); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes cpReturn { 0% { opacity: 1; transform: rotate(0deg) scale(1) translateY(0); } 100% { opacity: 0; transform: rotate(-5deg) scale(0.4) translateY(40px); } }
+    @keyframes cpPopOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.6); } }
+    @keyframes cpTapeSlap { 0% { opacity: 0; transform: translate(-50%,-50%) rotate(-8deg) scale(0); } 55% { opacity: 0; } 72% { opacity: 1; transform: translate(-50%,-50%) rotate(-3deg) scale(1.18); } 100% { opacity: 0.9; transform: translate(-50%,-50%) rotate(-3deg) scale(1); } }
+    input::placeholder, textarea::placeholder { color: #6f675b; }
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(231,173,77,0.16); border-radius: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+  </style>
+  <script src="./content/entry.js"></script>
+</helmet>
+
+<div style="min-height: 100vh; background: radial-gradient(150% 110% at 50% -5%, #211a10 0%, #15110b 45%, #0c0a06 100%); color: #3a2f1c; font-family: 'Kalam', 'JetBrains Mono', cursive; font-size: 17px; -webkit-font-smoothing: antialiased; padding: clamp(20px, 5vw, 64px) clamp(12px, 4vw, 40px) 90px;">
+
+  <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 70; background: rgba(18,12,6,0.9); display: flex; align-items: center; justify-content: center; padding: 4vw; cursor: zoom-out;">
+      {{ lbNode }}
+      <sc-if value="{{ lbClosing }}" hint-placeholder-val="{{ false }}">
+        <div style="position: absolute; top: 50%; left: 50%; width: 168px; height: 42px; background: rgba(206,186,128,0.85); border: 1px solid rgba(150,120,70,0.5); box-shadow: 0 2px 10px rgba(0,0,0,0.4); animation: cpTapeSlap 0.46s ease-out both; pointer-events: none;"></div>
+      </sc-if>
+      <button onClick="{{ closeLightbox }}" title="Close" style="position: fixed; top: 18px; right: 24px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 22px; line-height: 1; color: #2c2316; background: #e4d4a6; border: 1px solid rgba(150,120,70,0.5); box-shadow: 0 4px 14px rgba(0,0,0,0.4);">×</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ stamp }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; pointer-events: none;">
+      <div style="font-family: 'JetBrains Mono', monospace; color: #b5524a; border: 4px double #b5524a; border-radius: 50%; width: 290px; height: 290px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 0 2px rgba(181,82,74,0.18); animation: cpStamp 2.6s ease-out forwards;">
+        <div style="font-size: 13px; letter-spacing: 0.3em;">✦ property of ✦</div>
+        <div style="font-size: 38px; font-weight: 700; margin: 10px 0; letter-spacing: 0.04em;">Marcus Chiu</div>
+        <div style="font-size: 13px; letter-spacing: 0.22em;">keep climbing</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ beast }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden;">
+      <div style="position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, rgba(231,173,77,0.3), transparent 62%); animation: cpFlash 3s ease-out forwards;"></div>
+      <sc-for list="{{ confetti }}" as="c" hint-placeholder-count="18">
+        <div style="{{ c.style }}"></div>
+      </sc-for>
+      <div style="position: absolute; top: 36%; left: 0; right: 0; text-align: center; animation: cpBeast 3s ease-out forwards;">
+        <div style="font-family: 'Kalam', cursive; font-weight: 700; font-size: clamp(48px, 11vw, 128px); color: #e7ad4d; text-shadow: 0 4px 0 #9c7e3a, 0 10px 30px rgba(0,0,0,0.35); letter-spacing: 0.02em;">BEAST MODE</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 16px; letter-spacing: 0.4em; text-transform: uppercase; color: #b5524a; margin-top: 12px;">unlocked</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- stacked paper depth -->
+  <div style="position: relative; max-width: 900px; margin: 0 auto;">
+    <div style="position: absolute; inset: 10px -8px -10px 8px; background: #e7dcbd; border-radius: 3px; box-shadow: 0 30px 70px rgba(0,0,0,0.5);"></div>
+    <div style="position: absolute; inset: 5px -4px -5px 4px; background: #efe6cb; border-radius: 3px;"></div>
+
+    <!-- the page -->
+    <div data-screen-label="Notebook page" style="position: relative; background-color: #f4eedc; background-image: repeating-linear-gradient(180deg, transparent 0, transparent 33px, rgba(70,102,150,0.22) 33px, rgba(70,102,150,0.22) 34px); border-radius: 3px; box-shadow: inset 0 0 70px 8px rgba(120,95,55,0.12), 0 1px 0 rgba(255,255,255,0.3); padding: 64px clamp(26px, 5vw, 60px) 70px 96px; overflow: hidden;">
+
+      <!-- spiral binding -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 30px; display: flex; gap: 0; justify-content: space-around; padding: 0 18px; pointer-events: none;">
+        <sc-for list="{{ rings }}" as="r" hint-placeholder-count="18">
+          <span style="width: 13px; height: 22px; margin-top: -6px; border-radius: 50%; background: radial-gradient(circle at 50% 38%, #c9bb96 0%, #c9bb96 48%, #877b5e 54%, rgba(60,48,30,0.35) 70%, transparent 74%); box-shadow: inset 0 -2px 3px rgba(120,95,55,0.25);"></span>
+        </sc-for>
+      </div>
+
+      <!-- margin rule -->
+      <div style="position: absolute; top: 0; bottom: 0; left: 72px; width: 1px; background: rgba(193,84,72,0.55);"></div>
+      <div style="position: absolute; top: 0; bottom: 0; left: 76px; width: 1px; background: rgba(193,84,72,0.25);"></div>
+
+      <!-- header -->
+      <div style="margin-bottom: 30px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <div style="font-style: italic; font-weight: 500; font-size: clamp(26px, 4.4vw, 40px); color: #2c2316; letter-spacing: -0.01em; line-height: 1.1;">Training Log</div>
+          <div style="font-size: 17px; letter-spacing: 0.02em; color: #7a6a4a; text-align: right;">M. Chiu</div>
+        </div>
+        <div style="margin-top: 8px; font-size: 18px; color: #8a7a54; letter-spacing: 0.01em;">{{ tally }}</div>
+      </div>
+
+      <!-- tabs + add -->
+      <div style="display: flex; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 12px;">
+          <sc-if value="{{ editMode }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ toggleForm }}" style="cursor: pointer; font-family: inherit; font-style: italic; font-size: 18px; color: #a9802f; background: none; border: none; border-bottom: 1px dashed rgba(169,128,47,0.6); padding: 4px 2px;">{{ formBtnLabel }}</button>
+            <label style="display: inline-flex; align-items: center; gap: 7px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a774c;">server
+              <input value="{{ apiDraft }}" onInput="{{ setApiDraft }}" placeholder="same site — or http://host:port" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: none; letter-spacing: 0; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 7px 10px; outline: none; color-scheme: light; min-width: 230px;">
+            </label>
+            <button onClick="{{ connectServer }}" style="cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #15110b; background: #e7ad4d; border: none; border-radius: 2px; padding: 7px 12px; font-weight: 600;">connect</button>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: {{ serverStatusColor }};">{{ serverStatusLabel }}</span>
+          </sc-if>
+          <span style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #9a8a64; font-family: 'JetBrains Mono', monospace;">{{ modeHint }}</span>
+        </div>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <input value="{{ search }}" onInput="{{ setSearch }}" placeholder="Search entries…" style="font-family: inherit; font-size: 16px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 11px 14px; outline: none; color-scheme: light; min-width: 190px; box-shadow: 0 6px 16px rgba(80,60,30,0.18);">
+        <div ref="{{ setFilterWrap }}" style="position: relative; z-index: 5;">
+          <button onClick="{{ toggleFilter }}" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
+            <span style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a774c; font-family: 'JetBrains Mono', monospace;">Show</span>
+            <span style="font-size: 18px; letter-spacing: 0.01em; color: #2a1f10; min-width: 84px; text-align: left;">{{ filter }}</span>
+            <span aria-hidden="true" style="font-size: 12px; color: #6f5a2e;">▾</span>
+          </button>
+          <sc-if value="{{ filterOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; top: 100%; left: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
+              <sc-for list="{{ filterMenu }}" as="opt" hint-placeholder-count="3">
+                <button onClick="{{ opt.onClick }}" style="{{ opt.style }}" style-hover="filter: brightness(1.06);">{{ opt.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+          <div ref="{{ setSortWrap }}" style="position: relative; z-index: 5;">
+            <button onClick="{{ toggleSort }}" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
+              <span style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a774c; font-family: 'JetBrains Mono', monospace;">Sort</span>
+              <span style="font-size: 18px; letter-spacing: 0.01em; color: #2a1f10; min-width: 116px; text-align: left;">{{ sortCurrentLabel }}</span>
+              <span aria-hidden="true" style="font-size: 12px; color: #6f5a2e;">▾</span>
+            </button>
+            <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position: absolute; top: 100%; right: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
+                <sc-for list="{{ sortMenu }}" as="opt" hint-placeholder-count="3">
+                  <button onClick="{{ opt.onClick }}" style="{{ opt.style }}" style-hover="background: rgba(156,126,58,0.2);">{{ opt.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+
+      <!-- add form -->
+      <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="border: 1px dashed rgba(120,90,45,0.45); background: rgba(255,251,238,0.55); border-radius: 3px; padding: clamp(18px, 3vw, 26px); margin: 6px 0 30px; animation: nbRise .3s ease-out;">
+          <div style="font-style: italic; font-size: 21px; color: #a9802f; margin-bottom: 14px;">New entry —</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <label style="display: flex; flex-direction: column; gap: 6px; grid-column: 1 / -1;">
+              <span style="font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: #6f5f40;">What you did</span>
+              <input value="{{ form.title }}" onInput="{{ setFTitle }}" placeholder="e.g. First clean muscle-up" style="font-family: inherit; font-size: 17px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 11px 13px; outline: none; color-scheme: light;">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px;">
+              <span style="font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: #6f5f40;">Date</span>
+              <input type="date" value="{{ form.date }}" onInput="{{ setFDate }}" style="font-family: inherit; font-size: 17px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 10px 13px; outline: none; color-scheme: light;">
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1;">
+              <span style="font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: #6f5f40;">Disciplines <span style="color: #9a8a64; text-transform: none; letter-spacing: 0;">— pick any, or add your own</span></span>
+              <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+                <sc-for list="{{ discOptions }}" as="d" hint-placeholder-count="5">
+                  <button type="button" onClick="{{ d.onToggle }}" style="{{ d.style }}">{{ d.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: 2px;">
+                <input value="{{ form.newDisc }}" onInput="{{ setFNewDisc }}" placeholder="new discipline…" style="font-family: inherit; font-size: 16px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 9px 12px; outline: none; color-scheme: light; flex: 1 1 auto; max-width: 240px;">
+                <button type="button" onClick="{{ addDisc }}" style="cursor: pointer; font-family: inherit; font-size: 15px; color: #a9802f; background: none; border: 1px dashed rgba(169,128,47,0.6); border-radius: 2px; padding: 9px 14px;">+ add</button>
+              </div>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; grid-column: 1 / -1;">
+              <span style="font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; color: #6f5f40;">Notes <span style="color: #8a7a54; text-transform: none; letter-spacing: 0;">— optional</span></span>
+              <textarea value="{{ form.notes }}" onInput="{{ setFNotes }}" rows="2" placeholder="How it felt, what it took…" style="font-family: inherit; font-size: 17px; line-height: 1.45; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 11px 13px; outline: none; resize: vertical; color-scheme: light;"></textarea>
+            </label>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap;">
+            <button onClick="{{ submit }}" style="cursor: pointer; font-family: inherit; font-size: 17px; letter-spacing: 0.03em; color: #15110b; background: #e7ad4d; border: none; padding: 11px 22px; border-radius: 2px; font-weight: 600;">Write it in</button>
+            <button onClick="{{ toggleForm }}" style="cursor: pointer; font-family: inherit; font-style: italic; font-size: 17px; color: #7a6a4a; background: none; border: none; padding: 11px 4px;">cancel</button>
+            <span style="font-size: 15px; color: #8a7a54;">Photo? Save first, then tape one onto the entry.</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- entries -->
+      <sc-if value="{{ hasEntries }}" hint-placeholder-val="{{ true }}">
+        <sc-for list="{{ entries }}" as="item" hint-placeholder-count="2">
+          <div style="{{ item.cardStyle }}">
+            <sc-if value="{{ item.canEdit }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ item.onStartEdit }}" title="Edit this entry" style="position: absolute; top: 12px; right: 0; z-index: 7; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #6f5f40; background: rgba(255,251,238,0.7); border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 6px 11px;" style-hover="background: #e4d4a6; color: #2c2316;">✎ edit</button>
+            </sc-if>
+            <sc-if value="{{ item.showDisplay }}" hint-placeholder-val="{{ true }}">
+              <div style="position: absolute; left: -98px; top: 14px; width: 68px; text-align: right; white-space: pre-line; font-size: 16px; line-height: 1.15; color: #b5524a; letter-spacing: 0;">{{ item.gutterDate }}</div>
+            </sc-if>
+
+            <sc-if value="{{ item.editing }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 13px;">
+                <input type="date" value="{{ item.date }}" onInput="{{ item.onDate }}" style="font-family: inherit; font-size: 15px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 7px 10px; outline: none; color-scheme: light;">
+                <sc-if value="{{ item.isHidden }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #b5524a; font-family: 'JetBrains Mono', monospace;">hidden</span>
+                </sc-if>
+                <button onClick="{{ item.onToggleHidden }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #6f5f40; background: none; border: 1px solid rgba(120,90,45,0.35); border-radius: 2px; padding: 6px 12px;">{{ item.hideLabel }}</button>
+                <div style="margin-left: auto; display: flex; align-items: center; gap: 8px;">
+                  <sc-if value="{{ item.confirming }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size: 14px; color: #b5524a; font-style: italic;">Delete this entry?</span>
+                    <button onClick="{{ item.onConfirmDelete }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #fdf6e6; background: #b5524a; border: 1px solid #9c4138; border-radius: 2px; padding: 6px 12px;">Yes, delete</button>
+                    <button onClick="{{ item.onCancelDelete }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #6f5f40; background: none; border: 1px solid rgba(120,90,45,0.35); border-radius: 2px; padding: 6px 12px;">Cancel</button>
+                  </sc-if>
+                  <sc-if value="{{ item.notConfirming }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ item.onAskDelete }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #b5524a; background: none; border: 1px solid rgba(181,82,74,0.4); border-radius: 2px; padding: 6px 12px;" style-hover="background: rgba(181,82,74,0.12);">Delete entry</button>
+                  </sc-if>
+                </div>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 9px;">
+                <sc-for list="{{ item.discOptions }}" as="d" hint-placeholder-count="3">
+                  <button onClick="{{ d.onToggle }}" style="{{ d.style }}">{{ d.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input value="{{ item.newDisc }}" onInput="{{ item.onNewDisc }}" placeholder="new discipline…" style="font-family: inherit; font-size: 15px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 7px 11px; outline: none; color-scheme: light; flex: 0 1 210px;">
+                <button onClick="{{ item.onAddDisc }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #a9802f; background: none; border: 1px dashed rgba(169,128,47,0.6); border-radius: 2px; padding: 7px 13px;">+ add</button>
+              </div>
+              <input value="{{ item.title }}" onInput="{{ item.onTitle }}" placeholder="Title" style="width: 100%; font-family: inherit; font-style: italic; font-weight: 700; font-size: clamp(23px, 3vw, 31px); color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 8px 12px; outline: none; color-scheme: light; margin-bottom: 10px;">
+              <textarea value="{{ item.notes }}" onInput="{{ item.onNotes }}" rows="2" placeholder="Notes…" style="width: 100%; font-family: inherit; font-size: 17px; line-height: 1.5; color: #4a3f2c; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 10px 12px; outline: none; resize: vertical; color-scheme: light;"></textarea>
+            </sc-if>
+
+            <sc-if value="{{ item.showDisplay }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <sc-for list="{{ item.tags }}" as="tg" hint-placeholder-count="1">
+                  <span style="{{ tg.style }}">{{ tg.label }}</span>
+                </sc-for>
+              </div>
+              <h3 style="margin: 10px 0 0; font-style: italic; font-weight: 700; font-size: clamp(27px, 3.4vw, 38px); color: #2c2316; line-height: 1.18; letter-spacing: 0;">{{ item.title }}</h3>
+              <sc-if value="{{ item.hasNotes }}" hint-placeholder-val="{{ false }}">
+                <p style="margin: 8px 0 0; font-size: 19px; line-height: 34px; color: #4a3f2c; max-width: 620px;">{{ item.notes }}</p>
+              </sc-if>
+            </sc-if>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 26px; margin-top: 22px; align-items: flex-start;">
+              <sc-for list="{{ item.mediaItems }}" as="m" hint-placeholder-count="1">
+                <sc-if value="{{ m.isPhoto }}" hint-placeholder-val="{{ true }}">
+                  <div data-mid="{{ item.id }}" data-mi="{{ m.idx }}" style="position: relative; flex: 0 1 240px; max-width: 290px; transform: rotate({{ m.rot }});" onClick="{{ m.onClick }}">
+                    <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%) rotate(-3deg); width: 84px; height: 22px; background: rgba(206,186,128,0.55); border: 1px solid rgba(150,120,70,0.3); z-index: 2; box-shadow: 0 1px 4px rgba(80,60,30,0.25);"></div>
+                    <sc-if value="{{ m.dragging }}" hint-placeholder-val="{{ false }}">
+                      <div style="position: absolute; inset: 0; z-index: 4; background: rgba(244,238,220,0.72); border: 2px dashed rgba(150,120,70,0.6); border-radius: 2px;"></div>
+                    </sc-if>
+                    <sc-if value="{{ m.editing }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ m.onRemove }}" title="Remove" style="position: absolute; top: -10px; right: -10px; z-index: 5; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-family: inherit; font-size: 14px; line-height: 1; color: #fdf6e6; background: #b5524a; border: 1px solid rgba(80,30,25,0.4); box-shadow: 0 2px 5px rgba(80,40,30,0.4);">×</button>
+                      <button onClick="{{ m.onReplace }}" title="Replace photo" style="position: absolute; top: -10px; left: -10px; z-index: 5; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-family: inherit; font-size: 13px; line-height: 1; color: #2c2316; background: #e4d4a6; border: 1px solid rgba(150,120,70,0.5); box-shadow: 0 2px 5px rgba(80,40,30,0.35);">↻</button>
+                      <div onPointerDown="{{ m.onHandleDown }}" title="Drag to reorder" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 6; cursor: grab; touch-action: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #2c2316; background: rgba(228,212,166,0.95); border: 1px solid rgba(150,120,70,0.5); border-radius: 3px; padding: 2px 12px;">⠿ drag</div>
+                    </sc-if>
+                    {{ m.imgNode }}
+                  </div>
+                </sc-if>
+                <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}">
+                  <div data-mid="{{ item.id }}" data-mi="{{ m.idx }}" style="position: relative; flex: 1 1 260px; min-width: 240px; max-width: 440px; transform: rotate({{ m.rot }});" onClick="{{ m.onZoom }}">
+                    <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%) rotate(2.5deg); width: 84px; height: 22px; background: rgba(206,186,128,0.55); border: 1px solid rgba(150,120,70,0.3); z-index: 2; box-shadow: 0 1px 4px rgba(80,60,30,0.25);"></div>
+                    <sc-if value="{{ m.dragging }}" hint-placeholder-val="{{ false }}">
+                      <div style="position: absolute; inset: 0; z-index: 4; background: rgba(244,238,220,0.72); border: 2px dashed rgba(150,120,70,0.6); border-radius: 2px;"></div>
+                    </sc-if>
+                    <sc-if value="{{ m.editing }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ m.onRemove }}" title="Remove video" style="position: absolute; top: -10px; right: -10px; z-index: 5; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-family: inherit; font-size: 14px; line-height: 1; color: #fdf6e6; background: #b5524a; border: 1px solid rgba(80,30,25,0.4); box-shadow: 0 2px 5px rgba(80,40,30,0.4);">×</button>
+                      <div onPointerDown="{{ m.onHandleDown }}" title="Drag to reorder" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 6; cursor: grab; touch-action: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #2c2316; background: rgba(228,212,166,0.95); border: 1px solid rgba(150,120,70,0.5); border-radius: 3px; padding: 2px 12px;">⠿ drag</div>
+                    </sc-if>
+                    {{ m.node }}
+                  </div>
+                </sc-if>
+              </sc-for>
+              <sc-if value="{{ item.editing }}" hint-placeholder-val="{{ false }}">
+                <div style="align-self: center; display: flex; flex-direction: column; gap: 8px; flex: 0 1 240px;">
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button onClick="{{ item.onAddPhoto }}" title="Add a photo" style="cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 0.02em; color: #a9802f; background: none; border: 1px dashed rgba(169,128,47,0.6); border-radius: 2px; padding: 12px 16px;">+ photo</button>
+                    <button onClick="{{ item.onToggleVid }}" style="cursor: pointer; font-family: inherit; font-size: 16px; letter-spacing: 0.02em; color: #a9802f; background: none; border: 1px dashed rgba(169,128,47,0.6); border-radius: 2px; padding: 12px 16px;">+ video</button>
+                  </div>
+                  <sc-if value="{{ item.vidOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 10px; background: rgba(255,251,238,0.6);">
+                      <input value="{{ item.vidDraft }}" onInput="{{ item.onVidDraft }}" placeholder="paste a YouTube/Vimeo/.mp4 link" style="font-family: inherit; font-size: 14px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.3); border-radius: 2px; padding: 8px 11px; outline: none; color-scheme: light;">
+                      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button onClick="{{ item.onAddVid }}" style="cursor: pointer; font-family: inherit; font-size: 14px; color: #15110b; background: #e7ad4d; border: none; border-radius: 2px; padding: 8px 14px; font-weight: 600;">add link</button>
+                        <label style="cursor: pointer; font-family: inherit; font-size: 14px; color: #a9802f; background: none; border: 1px dashed rgba(169,128,47,0.6); border-radius: 2px; padding: 8px 14px; display: inline-flex; align-items: center;">upload file
+                          <input type="file" accept="video/*" onChange="{{ item.onVideoFile }}" style="display: none;">
+                        </label>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ item.editing }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 14px; margin-top: 20px;">
+                <button onClick="{{ item.onDoneEdit }}" style="cursor: pointer; font-family: inherit; font-size: 17px; letter-spacing: 0.03em; color: #15110b; background: #e7ad4d; border: none; padding: 10px 24px; border-radius: 2px; font-weight: 600;">Done</button>
+                <span style="font-size: 14px; color: #8a7a54; font-style: italic;">{{ saveNote }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </sc-if>
+
+      <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align: center; padding: 70px 20px; color: #8a7a54; font-style: italic;">
+          <div style="font-size: 30px; margin-bottom: 12px; color: #a9802f;">○</div>
+          <div style="font-size: 14px; line-height: 1.7;">This page is blank.<br>Write your first entry above.</div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;}}">
+class Component extends DCLogic {
+  KEY = 'cp_achievements_v1';
+
+  CAT_ORDER = ['Muscle-up', 'Front lever', 'Planche', 'Handstand', 'Pull-up', 'Calisthenics', 'Other'];
+  CAT_COLORS = {
+    'Muscle-up': '#e7ad4d',
+    'Front lever': '#a7b76e',
+    'Planche': '#7e96b4',
+    'Handstand': '#cf8f6f',
+    'Pull-up': '#cbb07a',
+    'Calisthenics': '#c2b9a9',
+    'Other': '#9aa886'
+  };
+  DISC_PALETTE = ['#e7ad4d', '#a7b76e', '#7e96b4', '#cf8f6f', '#cbb07a', '#b48ec0', '#7bb0a0', '#d49a6a'];
+
+  getSeed() {
+    return (typeof window !== 'undefined' && Array.isArray(window.CP_ENTRIES)) ? JSON.parse(JSON.stringify(window.CP_ENTRIES)) : [];
+  }
+
+  normalize(a) {
+    const cats = (Array.isArray(a.categories) && a.categories.length) ? a.categories.slice() : (a.category ? [a.category] : ['Other']);
+    let media;
+    if (Array.isArray(a.media)) media = a.media.map(m => ({ t: m.t, pid: m.pid, url: m.url, src: m.src }));
+    else {
+      media = [];
+      let pids;
+      if (Array.isArray(a.photoIds)) pids = a.photoIds.slice();
+      else { const pc = a.photos || 1; pids = []; for (let i = 0; i < pc; i++) pids.push(i === 0 ? a.slotId : a.slotId + '_' + i); }
+      pids.forEach(pid => media.push({ t: 'photo', pid: pid }));
+      const vids = Array.isArray(a.videos) ? a.videos.slice() : (a.video ? [a.video] : []);
+      vids.forEach(url => media.push({ t: 'video', url: url }));
+    }
+    return { ...a, categories: cats, category: cats[0], media: media };
+  }
+
+  colorFor(name) {
+    if (this.CAT_COLORS[name]) return this.CAT_COLORS[name];
+    let h = 0;
+    for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return this.DISC_PALETTE[h % this.DISC_PALETTE.length];
+  }
+
+  allDisciplines() {
+    const set = this.CAT_ORDER.slice();
+    this.state.achievements.forEach(a => (a.categories || []).forEach(c => { if (set.indexOf(c) < 0) set.push(c); }));
+    (this.state.form.categories || []).forEach(c => { if (set.indexOf(c) < 0) set.push(c); });
+    return set;
+  }
+
+  // Display always loads from content/entry.js (window.CP_ENTRIES) — works as a
+  // static site and over file://, with no server required. Only edit-mode
+  // saves/creates talk to server.js (see syncServer / uploadMedia).
+  loadAch() {
+    return this.getSeed().map(a => this.normalize(a));
+  }
+
+  saveAch(arr) { this.syncServer(arr); }
+  syncServer(arr) {
+    if (!this._server) return;
+    const clean = arr.map(a => ({ id: a.id, slotId: a.slotId, date: a.date, categories: a.categories, title: a.title, notes: a.notes, media: (a.media || []).map(m => m.t === 'photo' ? { t: 'photo', pid: m.pid, src: m.src || '' } : { t: 'video', url: m.url }) }));
+    clearTimeout(this._syncT);
+    this.setState({ saveState: 'saving' });
+    this._syncT = setTimeout(() => {
+      fetch(this.apiUrl('/api/entries'), { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(clean) })
+        .then(r => { if (!r.ok) throw new Error('http ' + r.status); this.setState({ saveState: 'saved' }); clearTimeout(this._savedT); this._savedT = setTimeout(() => this.setState({ saveState: '' }), 1800); })
+        .catch(() => this.setState({ saveState: 'error' }));
+    }, 250);
+  }
+  uploadMedia = (file, cb) => {
+    if (!file) return;
+    if (this._server) {
+      fetch(this.apiUrl('/api/media'), { method: 'POST', headers: { 'x-filename': file.name || ('clip-' + Date.now()) }, body: file })
+        .then(r => r.json()).then(d => { if (d && d.url) cb(d.url); else this.readFileData(file, cb); })
+        .catch(() => this.readFileData(file, cb));
+    } else { this.readFileData(file, cb); }
+  };
+  readFileData = (file, cb) => { const r = new FileReader(); r.onload = () => cb(r.result); r.readAsDataURL(file); };
+
+  blankForm() {
+    const t = new Date();
+    const iso = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+    return { title: '', date: iso, categories: ['Muscle-up'], notes: '', video: '', newDisc: '' };
+  }
+
+  loadApiBase() { try { return localStorage.getItem('cp_api_base') || ''; } catch (e) { return ''; } }
+  apiUrl(p) { return (this.state.apiBase || '') + p; }
+
+  state = { achievements: this.loadAch(), apiBase: this.loadApiBase(), apiDraft: this.loadApiBase(), serverStatus: 'checking', filter: 'All', mode: 'display', editingId: null, saveState: '', filterOpen: false, sort: 'newest', sortOpen: false, search: '', showHidden: false, entryDisc: {}, entryVid: {}, entryVidOpen: {}, confirmDeleteId: null, lightbox: null, lightboxClosing: false, dnd: null, stamp: false, beast: false, formOpen: false, form: this.blankForm() };
+
+  hexToRgba(hex, a) {
+    const h = hex.replace('#', '');
+    const r = parseInt(h.substring(0, 2), 16), g = parseInt(h.substring(2, 4), 16), b = parseInt(h.substring(4, 6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
+  months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  gutterDate(iso) {
+    const p = iso.split('-');
+    if (p.length !== 3) return iso;
+    return this.months[parseInt(p[1], 10) - 1] + ' ' + parseInt(p[2], 10) + '\n' + p[0];
+  }
+  shortDate(iso) {
+    const p = iso.split('-');
+    if (p.length !== 3) return iso;
+    return this.months[parseInt(p[1], 10) - 1] + ' ' + p[0];
+  }
+
+  videoMeta(url) {
+    if (!url || !url.trim()) return { hasVideo: false, isEmbed: false, isFile: false };
+    const u = url.trim();
+    const yt = u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);
+    if (yt) return { hasVideo: true, isEmbed: true, isFile: false, embedUrl: 'https://www.youtube.com/embed/' + yt[1] };
+    const vi = u.match(/vimeo\.com\/(\d+)/);
+    if (vi) return { hasVideo: true, isEmbed: true, isFile: false, embedUrl: 'https://player.vimeo.com/video/' + vi[1] };
+    return { hasVideo: true, isEmbed: false, isFile: true, fileUrl: u };
+  }
+
+  toggleForm = () => this.setState(s => ({ formOpen: !s.formOpen, form: s.formOpen ? s.form : this.blankForm() }));
+  setFTitle = (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, title: v } })); };
+  setFDate = (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, date: v } })); };
+  setFNotes = (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, notes: v } })); };
+  setFVideo = (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, video: v } })); };
+  readVideoFile = (file, cb) => { if (!file) return; const r = new FileReader(); r.onload = () => cb(r.result); r.readAsDataURL(file); };
+  onFormVideoFile = (e) => { const f = e.target.files && e.target.files[0]; this.readVideoFile(f, (d) => this.setState(s => ({ form: { ...s.form, video: d } }))); };
+  pushVideo = (id, val) => { if (!val) return; this.setState(s => { const next = s.achievements.map(a => a.id === id ? { ...a, media: [...(a.media || []), { t: 'video', url: val }] } : a); this.saveAch(next); return { achievements: next }; }); };
+  removeVideoAt = (id, idx) => { this.setState(s => { const next = s.achievements.map(a => { if (a.id !== id) return a; const vs = (a.videos || []).slice(); vs.splice(idx, 1); return { ...a, videos: vs }; }); this.saveAch(next); return { achievements: next }; }); };
+  setEntryVid = (id, val) => this.setState(s => ({ entryVid: { ...s.entryVid, [id]: val } }));
+  toggleVidPanel = (id) => this.setState(s => ({ entryVidOpen: { ...s.entryVidOpen, [id]: !((s.entryVidOpen || {})[id]) } }));
+  addEntryVid = (id) => { const v = ((this.state.entryVid || {})[id] || '').trim(); if (!v) return; this.pushVideo(id, v); this.setState(s => ({ entryVid: { ...s.entryVid, [id]: '' }, entryVidOpen: { ...s.entryVidOpen, [id]: false } })); };
+  closeLightbox = () => { if (this.state.lightboxClosing) return; this.setState({ lightboxClosing: true }); clearTimeout(this._lbT); this._lbT = setTimeout(() => this.setState({ lightbox: null, lightboxClosing: false }), 470); };
+  mediaDragStart = (id, index) => (e) => {
+    if (this.state.mode !== 'edit') return;
+    e.preventDefault(); e.stopPropagation();
+    const wrap = e.currentTarget.closest('[data-mid]');
+    if (!wrap) return;
+    const rect = wrap.getBoundingClientRect();
+    const clone = wrap.cloneNode(true);
+    const st = clone.style;
+    st.position = 'fixed'; st.left = rect.left + 'px'; st.top = rect.top + 'px'; st.width = rect.width + 'px'; st.height = rect.height + 'px'; st.margin = '0'; st.pointerEvents = 'none'; st.zIndex = '90'; st.opacity = '0.95'; st.transform = 'rotate(3deg) scale(1.03)'; st.boxShadow = '0 18px 44px rgba(0,0,0,0.45)';
+    document.body.appendChild(clone);
+    this._dnd = { id: id, index: index, clone: clone, offX: e.clientX - rect.left, offY: e.clientY - rect.top };
+    this.setState({ dnd: { id: id, index: index } });
+    window.addEventListener('pointermove', this.mediaDragMove);
+    window.addEventListener('pointerup', this.mediaDragEnd);
+    window.addEventListener('pointercancel', this.mediaDragEnd);
+  };
+  mediaDragMove = (e) => {
+    const d = this._dnd; if (!d) return;
+    d.clone.style.left = (e.clientX - d.offX) + 'px';
+    d.clone.style.top = (e.clientY - d.offY) + 'px';
+    const sibs = Array.prototype.slice.call(document.querySelectorAll('[data-mid="' + d.id + '"]'));
+    let target = -1, best = Infinity;
+    for (let k = 0; k < sibs.length; k++) { const r = sibs[k].getBoundingClientRect(); const cx = r.left + r.width / 2, cy = r.top + r.height / 2; const dist = Math.hypot(e.clientX - cx, e.clientY - cy); if (dist < best) { best = dist; target = parseInt(sibs[k].getAttribute('data-mi'), 10); } }
+    if (target >= 0 && target !== d.index) { this.reorderMedia(d.id, d.index, target); d.index = target; this.setState({ dnd: { id: d.id, index: target } }); }
+  };
+  mediaDragEnd = () => {
+    const d = this._dnd; if (!d) return;
+    if (d.clone && d.clone.parentNode) d.clone.parentNode.removeChild(d.clone);
+    window.removeEventListener('pointermove', this.mediaDragMove);
+    window.removeEventListener('pointerup', this.mediaDragEnd);
+    window.removeEventListener('pointercancel', this.mediaDragEnd);
+    this._dnd = null; this.setState({ dnd: null });
+  };
+  stopLb = (e) => e.stopPropagation();
+  setFNewDisc = (e) => { const v = e.target.value; this.setState(s => ({ form: { ...s.form, newDisc: v } })); };
+
+  toggleDisc = (name) => this.setState(s => {
+    const cur = (s.form.categories || []).slice();
+    const i = cur.indexOf(name);
+    if (i >= 0) cur.splice(i, 1); else cur.push(name);
+    return { form: { ...s.form, categories: cur } };
+  });
+  addDisc = () => this.setState(s => {
+    const n = (s.form.newDisc || '').trim();
+    if (!n) return {};
+    const cur = (s.form.categories || []).slice();
+    if (cur.indexOf(n) < 0) cur.push(n);
+    return { form: { ...s.form, categories: cur, newDisc: '' } };
+  });
+
+  submit = () => {
+    const f = this.state.form;
+    if (!f.title.trim()) return;
+    let cats = (f.categories || []).slice();
+    const nd = (f.newDisc || '').trim();
+    if (nd && cats.indexOf(nd) < 0) cats.push(nd);
+    if (!cats.length) cats = ['Other'];
+    const id = 'a' + Date.now();
+    const entry = { id, slotId: 'slot_' + id, date: f.date, categories: cats, category: cats[0], title: f.title.trim(), notes: f.notes.trim(), videos: [], photoIds: ['slot_' + id] };
+    this.setState(s => {
+      const next = [...s.achievements, entry];
+      this.saveAch(next);
+      return { achievements: next, formOpen: false, form: this.blankForm(), filter: 'All' };
+    });
+  };
+
+  removeAch = (id) => {
+    this.setState(s => {
+      const next = s.achievements.filter(a => a.id !== id);
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+
+  pickFile = (accept, cb) => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = accept; inp.onchange = () => { const f = inp.files && inp.files[0]; if (f) cb(f); }; inp.click(); };
+  addPhoto = (id) => {
+    const a = this.state.achievements.find(x => x.id === id);
+    const slot = a ? a.slotId : 'slot';
+    this.pickFile('image/*', (f) => this.uploadMedia(f, (url) => {
+      this.setState(s => {
+        const next = s.achievements.map(x => x.id === id ? { ...x, media: [...(x.media || []), { t: 'photo', pid: slot + '_' + Date.now(), src: url }] } : x);
+        this.saveAch(next); return { achievements: next };
+      });
+    }));
+  };
+  replacePhoto = (id, idx) => {
+    this.pickFile('image/*', (f) => this.uploadMedia(f, (url) => {
+      this.setState(s => {
+        const next = s.achievements.map(x => { if (x.id !== id) return x; const arr = (x.media || []).slice(); if (arr[idx]) arr[idx] = { ...arr[idx], src: url }; return { ...x, media: arr }; });
+        this.saveAch(next); return { achievements: next };
+      });
+    }));
+  };
+
+  removePhoto = (id, pid) => {
+    this.setState(s => {
+      const next = s.achievements.map(a => a.id === id ? { ...a, photoIds: (a.photoIds || []).filter(p => p !== pid) } : a);
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+  reorderMedia = (id, from, to) => { if (from === to) return; this.setState(s => { const next = s.achievements.map(a => { if (a.id !== id) return a; const arr = (a.media || []).slice(); const [m] = arr.splice(from, 1); arr.splice(to, 0, m); return { ...a, media: arr }; }); this.saveAch(next); return { achievements: next }; }); };
+  removeMediaAt = (id, idx) => { this.setState(s => { const next = s.achievements.map(a => { if (a.id !== id) return a; const arr = (a.media || []).slice(); arr.splice(idx, 1); return { ...a, media: arr }; }); this.saveAch(next); return { achievements: next }; }); };
+  allowDrop = (e) => { if (this._drag) e.preventDefault(); };
+
+  removeVideo = (id) => {
+    this.setState(s => {
+      const next = s.achievements.map(a => a.id === id ? { ...a, video: '' } : a);
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+
+  updateField = (id, field, value) => {
+    this.setState(s => {
+      const next = s.achievements.map(a => a.id === id ? { ...a, [field]: value } : a);
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+  toggleEntryDisc = (id, name) => {
+    this.setState(s => {
+      const next = s.achievements.map(a => {
+        if (a.id !== id) return a;
+        const cur = (a.categories || []).slice();
+        const i = cur.indexOf(name);
+        if (i >= 0) cur.splice(i, 1); else cur.push(name);
+        const cats = cur.length ? cur : ['Other'];
+        return { ...a, categories: cats, category: cats[0] };
+      });
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+  setEntryNewDisc = (id, value) => this.setState(s => ({ entryDisc: { ...s.entryDisc, [id]: value } }));
+  addEntryDisc = (id) => {
+    this.setState(s => {
+      const n = ((s.entryDisc || {})[id] || '').trim();
+      if (!n) return {};
+      const next = s.achievements.map(a => {
+        if (a.id !== id) return a;
+        const cur = (a.categories || []).slice();
+        if (cur.indexOf(n) < 0) cur.push(n);
+        return { ...a, categories: cur, category: cur[0] };
+      });
+      this.saveAch(next);
+      return { achievements: next, entryDisc: { ...s.entryDisc, [id]: '' } };
+    });
+  };
+  toggleHidden = (id) => {
+    this.setState(s => {
+      const next = s.achievements.map(a => a.id === id ? { ...a, hidden: !a.hidden } : a);
+      this.saveAch(next);
+      return { achievements: next };
+    });
+  };
+  toggleShowHidden = () => this.setState(s => ({ showHidden: !s.showHidden }));
+
+  askDelete = (id) => this.setState({ confirmDeleteId: id });
+  cancelDelete = () => this.setState({ confirmDeleteId: null });
+  confirmDelete = (id) => {
+    this.setState(s => {
+      const next = s.achievements.filter(a => a.id !== id);
+      this.saveAch(next);
+      return { achievements: next, confirmDeleteId: null };
+    });
+  };
+
+  setFilter = (name) => this.setState({ filter: name });
+  startEdit = (id) => this.setState({ editingId: id, confirmDeleteId: null });
+  stopEdit = () => this.setState({ editingId: null, confirmDeleteId: null });
+
+  setDisplay = () => this.setState({ mode: 'display', editingId: null, formOpen: false, filterOpen: false });
+  setEdit = () => this.setState({ mode: 'edit' });
+  toggleMode = () => this.setState(s => ({ mode: s.mode === 'edit' ? 'display' : 'edit', editingId: null, formOpen: false, filterOpen: false, confirmDeleteId: null }));
+  toggleFilter = () => this.setState(s => ({ filterOpen: !s.filterOpen, sortOpen: false }));
+  closeFilter = () => this.setState({ filterOpen: false });
+  setFilterWrap = (el) => { this.filterWrap = el; };
+  toggleSort = () => this.setState(s => ({ sortOpen: !s.sortOpen, filterOpen: false }));
+  setSortWrap = (el) => { this.sortWrap = el; };
+  setSearch = (e) => { const v = e.target.value; this.setState({ search: v }); };
+
+  componentDidMount() {
+    this._onDocDown = (e) => {
+      if (this.state.filterOpen && this.filterWrap && !this.filterWrap.contains(e.target)) this.setState({ filterOpen: false });
+      if (this.state.sortOpen && this.sortWrap && !this.sortWrap.contains(e.target)) this.setState({ sortOpen: false });
+    };
+    document.addEventListener('mousedown', this._onDocDown);
+    this._kbuf = '';
+    this._kidx = 0;
+    this._konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    this._onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'e' || e.key === 'E')) { e.preventDefault(); this.toggleMode(); return; }
+      const k = e.key;
+      const norm = (k && k.length === 1) ? k.toLowerCase() : k;
+      const exp = this._konami[this._kidx];
+      if (norm === exp) { this._kidx++; if (this._kidx === this._konami.length) { this._kidx = 0; this.triggerBeast(); } }
+      else { this._kidx = (norm === this._konami[0]) ? 1 : 0; }
+      const tag = (e.target && e.target.tagName) || '';
+      const typing = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (e.target && e.target.isContentEditable);
+      if (!typing && k && k.length === 1 && /[a-z]/i.test(k)) {
+        this._kbuf = (this._kbuf + k.toLowerCase()).slice(-6);
+        if (this._kbuf === 'marcus') { this._kbuf = ''; this.triggerStamp(); }
+      }
+    };
+    document.addEventListener('keydown', this._onKey);
+    // Best-effort: if server.js is running, detect it (enables edit-mode saves
+    // + uploads) and pick up the latest persisted entries. Failure is fine —
+    // display already rendered from content/entry.js.
+    this.detectServer();
+  }
+
+  detectServer() {
+    const base = this.state.apiBase || '';
+    if (!base && location.protocol === 'file:') { this._server = false; this.setState({ serverStatus: 'offline' }); return; }
+    this.setState({ serverStatus: 'checking' });
+    fetch(this.apiUrl('/api/entries')).then(r => r.ok ? r.json() : null).then(d => {
+      if (Array.isArray(d)) { this._server = true; this.setState({ serverStatus: 'online' }); if (d.length) this.setState({ achievements: d.map(a => this.normalize(a)) }); }
+      else { this._server = false; this.setState({ serverStatus: 'offline' }); }
+    }).catch(() => { this._server = false; this.setState({ serverStatus: 'offline' }); });
+  }
+
+  setApiDraft = (e) => this.setState({ apiDraft: e.target.value });
+  connectServer = () => {
+    const base = (this.state.apiDraft || '').trim().replace(/\/+$/, '');
+    try { localStorage.setItem('cp_api_base', base); } catch (e) {}
+    this._server = false;
+    this.setState({ apiBase: base, apiDraft: base, saveState: '' }, () => this.detectServer());
+  };
+  componentWillUnmount() {
+    if (this._onDocDown) document.removeEventListener('mousedown', this._onDocDown);
+    if (this._onKey) document.removeEventListener('keydown', this._onKey);
+    clearTimeout(this._stampT); clearTimeout(this._beastT); clearTimeout(this._lbT);
+  }
+  triggerStamp = () => { this.setState({ stamp: true }); clearTimeout(this._stampT); this._stampT = setTimeout(() => this.setState({ stamp: false }), 2600); };
+  triggerBeast = () => { this.setState({ beast: true }); clearTimeout(this._beastT); this._beastT = setTimeout(() => this.setState({ beast: false }), 3000); };
+
+  renderVals() {
+    const all = this.state.achievements;
+    const filter = this.state.filter;
+    const editMode = this.state.mode === 'edit';
+    const dnd = this.state.dnd;
+    const counted = all.filter(a => editMode || !a.hidden);
+
+    const present = [];
+    counted.forEach(a => (a.categories || []).forEach(c => { if (present.indexOf(c) < 0) present.push(c); }));
+    present.sort((a, b) => {
+      const ia = this.CAT_ORDER.indexOf(a), ib = this.CAT_ORDER.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+
+    const chipNames = ['All', ...present];
+    const filterMenu = chipNames.map(name => {
+      const active = name === filter;
+      const color = name === 'All' ? '#9c7e3a' : this.colorFor(name);
+      const style = 'cursor:pointer;display:block;width:100%;text-align:left;font-family:inherit;font-size:17px;letter-spacing:0.01em;padding:9px 13px;border:none;border-radius:2px;margin-bottom:3px;transition:filter .12s;background:' + color + ';color:#2c2316;'
+        + (active ? 'font-weight:700;box-shadow:inset 0 0 0 2px rgba(60,48,30,0.5);' : 'font-weight:400;');
+      return { label: name, active, color, style, onClick: () => this.setState({ filter: name, filterOpen: false }) };
+    });
+
+    const sortedAll = counted.slice().sort((a, b) => a.date.localeCompare(b.date));
+    const since = counted.length ? this.shortDate(sortedAll[0].date) : '—';
+    const tally = counted.length + (counted.length === 1 ? ' entry' : ' entries') + '  ·  ' + present.length + (present.length === 1 ? ' discipline' : ' disciplines') + '  ·  since ' + since;
+
+    const hiddenCount = all.filter(a => a.hidden).length;
+    const filtered = filter === 'All' ? counted : counted.filter(a => (a.categories || []).indexOf(filter) >= 0);
+    const q = (this.state.search || '').trim().toLowerCase();
+    const searched = q ? filtered.filter(a => (((a.title || '') + ' ' + (a.notes || '') + ' ' + (a.categories || []).join(' ')).toLowerCase().indexOf(q) >= 0)) : filtered;
+    const sort = this.state.sort;
+    const sorted = searched.slice().sort((a, b) => {
+      if (sort === 'oldest') return a.date.localeCompare(b.date) || a.id.localeCompare(b.id);
+      if (sort === 'title') return (a.title || '').localeCompare(b.title || '');
+      return b.date.localeCompare(a.date) || b.id.localeCompare(a.id);
+    });
+    const sortLabels = { newest: 'Newest first', oldest: 'Oldest first', title: 'Title A–Z' };
+    const sortMenu = ['newest', 'oldest', 'title'].map(key => {
+      const active = key === sort;
+      const style = 'cursor:pointer;display:block;width:100%;text-align:left;font-family:inherit;font-size:17px;letter-spacing:0.01em;padding:8px 13px;border:none;border-radius:2px;transition:background .12s;'
+        + (active ? 'background:#9c7e3a;color:#fdf8ea;' : 'background:transparent;color:#3a2f1c;');
+      return { label: sortLabels[key], active, style, onClick: () => this.setState({ sort: key, sortOpen: false }) };
+    });
+
+    const entries = sorted.map(a => {
+      const editing = editMode && this.state.editingId === a.id;
+      const tags = (a.categories || []).map(c => {
+        const col = this.colorFor(c);
+        return { label: c, style: 'font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 11px;border-radius:2px;color:#3a2f1c;background:' + this.hexToRgba(col, 0.28) + ';border:1px solid ' + this.hexToRgba(col, 0.6) + ';white-space:nowrap;' };
+      });
+      const mediaItems = (a.media || []).map((m, i) => {
+        const dragging = !!(dnd && dnd.id === a.id && dnd.index === i);
+        const base = { idx: i, editing: editing, dragging: dragging, rot: (i % 2 === 0 ? '-1.4deg' : '1.3deg'), onHandleDown: this.mediaDragStart(a.id, i), onRemove: () => this.removeMediaAt(a.id, i) };
+        if (m.t === 'photo') {
+          const hasSrc = !!m.src;
+          const imgNode = hasSrc
+            ? React.createElement('img', { src: m.src, draggable: false, style: { width: '100%', height: '200px', objectFit: 'cover', display: 'block', borderRadius: '2px', boxShadow: '0 6px 16px rgba(80,60,30,0.28)', border: '1px solid rgba(120,90,45,0.25)', background: '#f3ead2' } })
+            : React.createElement('div', { style: { width: '100%', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '2px', border: '1px dashed rgba(120,90,45,0.5)', background: '#f3ead2', color: '#8a7a54', fontSize: '15px', fontFamily: "'Kalam', cursive" } }, 'tape a photo here');
+          return Object.assign({}, base, { isPhoto: true, isVideo: false, hasSrc: hasSrc, imgNode: imgNode, onReplace: () => this.replacePhoto(a.id, i), onClick: () => { if (editing) { if (!hasSrc) this.replacePhoto(a.id, i); } else if (hasSrc) this.setState({ lightbox: { type: 'image', src: m.src } }); } });
+        }
+        const vm = this.videoMeta(m.url);
+        const node = vm.isEmbed ? React.createElement('iframe', { src: vm.embedUrl, allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowFullScreen: true, style: { width: '100%', aspectRatio: '16 / 9', border: '1px solid rgba(120,90,45,0.3)', borderRadius: '2px', background: '#000', boxShadow: '0 6px 18px rgba(0,0,0,0.35)' } }) : React.createElement('video', { src: vm.fileUrl, controls: true, playsInline: true, style: { width: '100%', aspectRatio: '16 / 9', border: '1px solid rgba(120,90,45,0.3)', borderRadius: '2px', background: '#000', objectFit: 'cover', boxShadow: '0 6px 18px rgba(0,0,0,0.35)' } });
+        return Object.assign({}, base, { isPhoto: false, isVideo: true, node: node, onZoom: () => { if (editing) return; this.setState({ lightbox: vm.isEmbed ? { type: 'embed', embedUrl: vm.embedUrl } : { type: 'file', fileUrl: vm.fileUrl } }); } });
+      });
+      const isHidden = !!a.hidden;
+      const cardStyle = 'position: relative; padding: 14px 0 30px; border-bottom: 1px solid rgba(120,90,45,0.18);' + (isHidden ? ' opacity: 0.5;' : '');
+      const eDiscOptions = this.allDisciplines().map(name => {
+        const sel = (a.categories || []).indexOf(name) >= 0;
+        const col = this.colorFor(name);
+        const style = 'cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:0.02em;padding:5px 11px;border-radius:2px;transition:all .15s;'
+          + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:#5a4d35;background:transparent;border:1px solid rgba(120,90,45,0.35);'));
+        return { label: name, selected: sel, style, onToggle: () => this.toggleEntryDisc(a.id, name) };
+      });
+      return {
+        ...a,
+        editing: editing,
+        showDisplay: !editing,
+        canEdit: editMode && !editing,
+        onStartEdit: () => this.startEdit(a.id),
+        onDoneEdit: this.stopEdit,
+        gutterDate: this.gutterDate(a.date),
+        tags,
+        mediaItems,
+        isHidden,
+        hideLabel: isHidden ? 'Unhide' : 'Hide',
+        cardStyle,
+        discOptions: eDiscOptions,
+        newDisc: (this.state.entryDisc || {})[a.id] || '',
+        onNewDisc: (e) => this.setEntryNewDisc(a.id, e.target.value),
+        onAddDisc: () => this.addEntryDisc(a.id),
+        onTitle: (e) => this.updateField(a.id, 'title', e.target.value),
+        onNotes: (e) => this.updateField(a.id, 'notes', e.target.value),
+        onDate: (e) => this.updateField(a.id, 'date', e.target.value),
+        onToggleHidden: () => this.toggleHidden(a.id),
+        confirming: this.state.confirmDeleteId === a.id,
+        notConfirming: this.state.confirmDeleteId !== a.id,
+        onAskDelete: () => this.askDelete(a.id),
+        onConfirmDelete: () => this.confirmDelete(a.id),
+        onCancelDelete: this.cancelDelete,
+        onAddPhoto: () => this.addPhoto(a.id),
+        onVideoFile: (e) => { const f = e.target.files && e.target.files[0]; this.uploadMedia(f, (d) => this.pushVideo(a.id, d)); this.setState(s => ({ entryVidOpen: { ...s.entryVidOpen, [a.id]: false } })); },
+        vidDraft: (this.state.entryVid || {})[a.id] || '',
+        onVidDraft: (e) => this.setEntryVid(a.id, e.target.value),
+        onAddVid: () => this.addEntryVid(a.id),
+        vidOpen: !!(this.state.entryVidOpen || {})[a.id],
+        onToggleVid: () => this.toggleVidPanel(a.id),
+        hasNotes: !!(a.notes && a.notes.trim()),
+        onDelete: () => this.removeAch(a.id)
+      };
+    });
+
+    const selected = this.state.form.categories || [];
+    const discOptions = this.allDisciplines().map(name => {
+      const sel = selected.indexOf(name) >= 0;
+      const col = this.colorFor(name);
+      const style = 'cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:0.02em;padding:6px 12px;border-radius:2px;transition:all .15s;'
+        + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:#5a4d35;background:transparent;border:1px solid rgba(120,90,45,0.35);'));
+      return { label: name, selected: sel, style, onToggle: () => this.toggleDisc(name) };
+    });
+
+    const rings = [];
+    for (let i = 0; i < 20; i++) rings.push(i);
+
+    const isMac = /Mac|iPhone|iPad|iPod/.test((navigator.platform || '') + ' ' + (navigator.userAgent || ''));
+    const shortcut = isMac ? '⌘E' : 'Ctrl+E';
+    const modeHint = editMode ? ('edit mode · ' + shortcut + ' to view') : '';
+
+    const confetti = [];
+    for (let i = 0; i < 18; i++) {
+      const x = (i * 53 + 13) % 100;
+      const sz = 10 + (i % 4) * 4;
+      const dur = 1.6 + ((i * 37) % 10) / 10;
+      const delay = ((i * 29) % 9) / 10;
+      confetti.push({ style: 'position:absolute;top:-44px;left:' + x + '%;width:' + sz + 'px;height:' + sz + 'px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f0cd86,#c79433);box-shadow:0 2px 6px rgba(0,0,0,0.25);animation:cpFall ' + dur + 's linear ' + delay + 's forwards;' });
+    }
+
+    const lb = this.state.lightbox;
+    const lbClosing = this.state.lightboxClosing;
+    const imgAnim = lbClosing ? 'cpReturn 0.46s cubic-bezier(.4,0,.7,.5) both' : 'cpTear 0.55s cubic-bezier(.2,.8,.25,1) both';
+    const popAnim = lbClosing ? 'cpPopOut 0.4s ease-in both' : 'cpPop 0.4s cubic-bezier(.2,.8,.25,1) both';
+    let lbNode = null;
+    if (lb) {
+      if (lb.type === 'image') lbNode = React.createElement('img', { src: lb.src, style: { maxWidth: '92vw', maxHeight: '90vh', borderRadius: '3px', boxShadow: '0 20px 60px rgba(0,0,0,0.6)', animation: imgAnim, transformOrigin: 'center' } });
+      else if (lb.type === 'embed') lbNode = React.createElement('iframe', { src: lb.embedUrl, onClick: this.stopLb, allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture', allowFullScreen: true, style: { width: 'min(92vw, 1280px)', aspectRatio: '16 / 9', border: 'none', borderRadius: '3px', boxShadow: '0 20px 60px rgba(0,0,0,0.6)', animation: popAnim } });
+      else if (lb.type === 'file') lbNode = React.createElement('video', { src: lb.fileUrl, onClick: this.stopLb, controls: true, autoPlay: true, playsInline: true, style: { maxWidth: '92vw', maxHeight: '90vh', borderRadius: '3px', boxShadow: '0 20px 60px rgba(0,0,0,0.6)', background: '#000', animation: popAnim } });
+    }
+    return {
+      rings,
+      tally,
+      lbNode,
+      filter: filter,
+      filterMenu,
+      filterOpen: this.state.filterOpen,
+      toggleFilter: this.toggleFilter,
+      closeFilter: this.closeFilter,
+      setFilterWrap: this.setFilterWrap,
+      sortMenu,
+      sortOpen: this.state.sortOpen,
+      toggleSort: this.toggleSort,
+      setSortWrap: this.setSortWrap,
+      sortCurrentLabel: sortLabels[sort],
+      search: this.state.search,
+      setSearch: this.setSearch,
+      editMode,
+      modeHint,
+      apiDraft: this.state.apiDraft,
+      setApiDraft: this.setApiDraft,
+      connectServer: this.connectServer,
+      serverStatus: this.state.serverStatus,
+      serverStatusLabel: this.state.serverStatus === 'online' ? '● connected' : this.state.serverStatus === 'checking' ? '○ checking…' : '○ not connected',
+      serverStatusColor: this.state.serverStatus === 'online' ? '#4a7a4a' : (this.state.serverStatus === 'offline' ? '#b5524a' : '#8a7a54'),
+      saveNote: this.state.serverStatus === 'online' ? (this.state.saveState === 'saving' ? 'Saving…' : this.state.saveState === 'error' ? 'Save failed — check the server endpoint' : this.state.saveState === 'saved' ? 'Saved to content/entry.js ✓' : 'Changes save to content/entry.js') : 'Not connected — set the server endpoint above to save',
+      displayMode: !editMode,
+      lightbox: !!this.state.lightbox,
+      lbImage: !!this.state.lightbox && this.state.lightbox.type === 'image',
+      lbEmbed: !!this.state.lightbox && this.state.lightbox.type === 'embed',
+      lbFile: !!this.state.lightbox && this.state.lightbox.type === 'file',
+      lbSrc: (this.state.lightbox && this.state.lightbox.src) || '',
+      lbEmbedUrl: (this.state.lightbox && this.state.lightbox.embedUrl) || '',
+      lbFileUrl: (this.state.lightbox && this.state.lightbox.fileUrl) || '',
+      closeLightbox: this.closeLightbox,
+      stopLb: this.stopLb,
+      allowDrop: this.allowDrop,
+      lbClosing: this.state.lightboxClosing,
+      stamp: this.state.stamp,
+      beast: this.state.beast,
+      confetti,
+      hasHidden: hiddenCount > 0,
+      hiddenCount,
+      showHiddenLabel: this.state.showHidden ? ('hide hidden (' + hiddenCount + ')') : ('show hidden (' + hiddenCount + ')'),
+      onToggleShowHidden: this.toggleShowHidden,
+      entries,
+      hasEntries: entries.length > 0,
+      isEmpty: entries.length === 0,
+      formOpen: this.state.formOpen,
+      formBtnLabel: this.state.formOpen ? 'close' : '+ new entry',
+      form: this.state.form,
+      formVideoLinkVal: ((this.state.form.video || '').slice(0, 5) === 'data:') ? '' : (this.state.form.video || ''),
+      formVideoIsData: (this.state.form.video || '').slice(0, 5) === 'data:',
+      onFormVideoFile: this.onFormVideoFile,
+      discOptions,
+      toggleForm: this.toggleForm,
+      setFTitle: this.setFTitle, setFDate: this.setFDate, setFNotes: this.setFNotes, setFVideo: this.setFVideo, setFNewDisc: this.setFNewDisc,
+      addDisc: this.addDisc,
+      submit: this.submit
+    };
+  }
+}
+</script>
+</body>
+</html>
