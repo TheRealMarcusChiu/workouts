@@ -6,7 +6,8 @@ window.CP_ENTRIES = [
     "slotId": "slot_s1",
     "date": "2025-07-01",
     "categories": [
-      "Muscle-up"
+      "Muscle-up",
+      "Calisthenics"
     ],
     "title": "First muscle-up",
     "notes": "Ugly, kipped, but clean enough to count. Bar to hips.",
