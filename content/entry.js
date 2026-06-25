@@ -48,16 +48,5 @@ window.CP_ENTRIES = [
     "title": "TEST ENTRY",
     "notes": "TEST ENTRY NOTES",
     "media": []
-  },
-  {
-    "id": "a1782357011313",
-    "slotId": "slot_a1782357011313",
-    "date": "2026-06-24",
-    "categories": [
-      "Muscle-up"
-    ],
-    "title": "Test Entry #2",
-    "notes": "",
-    "media": []
   }
 ];
