@@ -36,5 +36,17 @@ window.CP_ENTRIES = [
         "src": "./content/media/front-lever.jpg"
       }
     ]
+  },
+  {
+    "id": "a1782356978552",
+    "slotId": "slot_a1782356978552",
+    "date": "2026-06-24",
+    "categories": [
+      "Muscle-up",
+      "Calisthenics"
+    ],
+    "title": "TEST ENTRY",
+    "notes": "TEST ENTRY NOTES",
+    "media": []
   }
 ];
