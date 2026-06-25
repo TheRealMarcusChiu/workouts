@@ -417,7 +417,7 @@ class Component extends DCLogic {
   }
 
   loadApiBase() { try { return localStorage.getItem('cp_api_base') || ''; } catch (e) { return ''; } }
-  loadDark() { try { return localStorage.getItem('cp_dark') === '1'; } catch (e) { return false; } }
+  loadDark() { try { const v = localStorage.getItem('cp_dark'); return v === null ? true : v === '1'; } catch (e) { return true; } }
   toggleDark = () => this.setState(s => { const d = !s.dark; try { localStorage.setItem('cp_dark', d ? '1' : '0'); } catch (e) {} return { dark: d }; });
   apiUrl(p) { return (this.state.apiBase || '') + p; }
 
