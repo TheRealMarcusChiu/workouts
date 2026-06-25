@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<title>Workouts</title>
 </head>
 <body>
 <x-dc>
@@ -17,6 +16,28 @@
     html, body { margin: 0; padding: 0; background: #100d08; }
     * { box-sizing: border-box; }
     ::selection { background: rgba(231,173,77,0.22); color: #f3e9d6; }
+
+    /* ---- dark mode: night-desk notebook. Overrides beat inline styles via !important;
+       light mode is the default and is untouched. ---- */
+    [data-theme="dark"] [data-tk="paper-back"] { background: #1c160d !important; }
+    [data-theme="dark"] [data-tk="paper-mid"] { background: #221b10 !important; }
+    [data-theme="dark"] [data-tk="page"] {
+      background-color: #2a2118 !important;
+      background-image: repeating-linear-gradient(180deg, transparent 0, transparent 33px, rgba(126,150,180,0.16) 33px, rgba(126,150,180,0.16) 34px) !important;
+      box-shadow: inset 0 0 80px 10px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.05) !important;
+    }
+    [data-theme="dark"] [data-tk="ink"] { color: #efe6d0 !important; }
+    [data-theme="dark"] [data-tk="muted"] { color: #b7a988 !important; }
+    [data-theme="dark"] [data-tk="page"] h3 { color: #efe6d0 !important; }
+    [data-theme="dark"] [data-tk="page"] p { color: #d6c9aa !important; }
+    [data-theme="dark"] [data-tk="form"] { background: rgba(30,24,14,0.7) !important; border-color: rgba(231,173,77,0.3) !important; }
+    [data-theme="dark"] [data-tk="form"] span { color: #b7a988 !important; }
+    [data-theme="dark"] [data-tk="page"] input,
+    [data-theme="dark"] [data-tk="page"] textarea {
+      background: #18130b !important; color: #efe6d0 !important;
+      border-color: rgba(231,173,77,0.24) !important; color-scheme: dark !important;
+    }
+    [data-theme="dark"] [data-tk="edit-pencil"] { background: rgba(40,32,18,0.8) !important; color: #d3b06a !important; border-color: rgba(231,173,77,0.35) !important; }
     @keyframes nbRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes cpStamp { 0% { opacity: 0; transform: scale(1.9) rotate(-30deg); } 16% { opacity: 0.95; transform: scale(0.94) rotate(-14deg); } 24% { transform: scale(1.05) rotate(-14deg); } 32% { transform: scale(1) rotate(-14deg); } 82% { opacity: 0.92; transform: scale(1) rotate(-14deg); } 100% { opacity: 0; transform: scale(1) rotate(-14deg); } }
     @keyframes cpFlash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
@@ -35,7 +56,7 @@
   <script src="./content/entry.js"></script>
 </helmet>
 
-<div style="min-height: 100vh; background: radial-gradient(150% 110% at 50% -5%, #211a10 0%, #15110b 45%, #0c0a06 100%); color: #3a2f1c; font-family: 'Kalam', 'JetBrains Mono', cursive; font-size: 17px; -webkit-font-smoothing: antialiased; padding: clamp(20px, 5vw, 64px) clamp(12px, 4vw, 40px) 90px;">
+<div data-theme="{{ themeAttr }}" style="min-height: 100vh; background: {{ deskBg }}; color: #3a2f1c; font-family: 'Kalam', 'JetBrains Mono', cursive; font-size: 17px; -webkit-font-smoothing: antialiased; padding: clamp(20px, 5vw, 64px) clamp(12px, 4vw, 40px) 90px;">
 
   <sc-if value="{{ lightbox }}" hint-placeholder-val="{{ false }}">
     <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 70; background: rgba(18,12,6,0.9); display: flex; align-items: center; justify-content: center; padding: 4vw; cursor: zoom-out;">
@@ -72,11 +93,11 @@
 
   <!-- stacked paper depth -->
   <div style="position: relative; max-width: 900px; margin: 0 auto;">
-    <div style="position: absolute; inset: 10px -8px -10px 8px; background: #e7dcbd; border-radius: 3px; box-shadow: 0 30px 70px rgba(0,0,0,0.5);"></div>
-    <div style="position: absolute; inset: 5px -4px -5px 4px; background: #efe6cb; border-radius: 3px;"></div>
+    <div data-tk="paper-back" style="position: absolute; inset: 10px -8px -10px 8px; background: #e7dcbd; border-radius: 3px; box-shadow: 0 30px 70px rgba(0,0,0,0.5);"></div>
+    <div data-tk="paper-mid" style="position: absolute; inset: 5px -4px -5px 4px; background: #efe6cb; border-radius: 3px;"></div>
 
     <!-- the page -->
-    <div data-screen-label="Notebook page" style="position: relative; background-color: #f4eedc; background-image: repeating-linear-gradient(180deg, transparent 0, transparent 33px, rgba(70,102,150,0.22) 33px, rgba(70,102,150,0.22) 34px); border-radius: 3px; box-shadow: inset 0 0 70px 8px rgba(120,95,55,0.12), 0 1px 0 rgba(255,255,255,0.3); padding: 64px clamp(26px, 5vw, 60px) 70px 96px; overflow: hidden;">
+    <div data-tk="page" data-screen-label="Notebook page" style="position: relative; background-color: #f4eedc; background-image: repeating-linear-gradient(180deg, transparent 0, transparent 33px, rgba(70,102,150,0.22) 33px, rgba(70,102,150,0.22) 34px); border-radius: 3px; box-shadow: inset 0 0 70px 8px rgba(120,95,55,0.12), 0 1px 0 rgba(255,255,255,0.3); padding: 64px clamp(26px, 5vw, 60px) 70px 96px; overflow: hidden;">
 
       <!-- spiral binding -->
       <div style="position: absolute; top: 0; left: 0; right: 0; height: 30px; display: flex; gap: 0; justify-content: space-around; padding: 0 18px; pointer-events: none;">
@@ -92,10 +113,13 @@
       <!-- header -->
       <div style="margin-bottom: 30px;">
         <div style="display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-          <div style="font-style: italic; font-weight: 500; font-size: clamp(26px, 4.4vw, 40px); color: #2c2316; letter-spacing: -0.01em; line-height: 1.1;">Training Log</div>
-          <div style="font-size: 17px; letter-spacing: 0.02em; color: #7a6a4a; text-align: right;">M. Chiu</div>
+          <div style="font-style: italic; font-weight: 500; font-size: clamp(26px, 4.4vw, 40px); color: #2c2316; letter-spacing: -0.01em; line-height: 1.1;" data-tk="ink">Training Log</div>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <button onClick="{{ toggleDark }}" title="Toggle dark mode" style="cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #7a6a4a; background: none; border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 6px 11px;" data-tk="muted" style-hover="border-color: rgba(231,173,77,0.7);">{{ darkLabel }}</button>
+            <div style="font-size: 17px; letter-spacing: 0.02em; color: #7a6a4a; text-align: right;" data-tk="muted">M. Chiu</div>
+          </div>
         </div>
-        <div style="margin-top: 8px; font-size: 18px; color: #8a7a54; letter-spacing: 0.01em;">{{ tally }}</div>
+        <div style="margin-top: 8px; font-size: 18px; color: #8a7a54; letter-spacing: 0.01em;" data-tk="muted">{{ tally }}</div>
       </div>
 
       <!-- tabs + add -->
@@ -146,7 +170,7 @@
 
       <!-- add form -->
       <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
-        <div style="border: 1px dashed rgba(120,90,45,0.45); background: rgba(255,251,238,0.55); border-radius: 3px; padding: clamp(18px, 3vw, 26px); margin: 6px 0 30px; animation: nbRise .3s ease-out;">
+        <div data-tk="form" style="border: 1px dashed rgba(120,90,45,0.45); background: rgba(255,251,238,0.55); border-radius: 3px; padding: clamp(18px, 3vw, 26px); margin: 6px 0 30px; animation: nbRise .3s ease-out;">
           <div style="font-style: italic; font-size: 21px; color: #a9802f; margin-bottom: 14px;">New entry —</div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <label style="display: flex; flex-direction: column; gap: 6px; grid-column: 1 / -1;">
@@ -187,7 +211,7 @@
         <sc-for list="{{ entries }}" as="item" hint-placeholder-count="2">
           <div style="{{ item.cardStyle }}">
             <sc-if value="{{ item.canEdit }}" hint-placeholder-val="{{ false }}">
-              <button onClick="{{ item.onStartEdit }}" title="Edit this entry" style="position: absolute; top: 12px; right: 0; z-index: 7; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #6f5f40; background: rgba(255,251,238,0.7); border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 6px 11px;" style-hover="background: #e4d4a6; color: #2c2316;">✎ edit</button>
+              <button onClick="{{ item.onStartEdit }}" title="Edit this entry" data-tk="edit-pencil" style="position: absolute; top: 12px; right: 0; z-index: 7; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #6f5f40; background: rgba(255,251,238,0.7); border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 6px 11px;" style-hover="background: #e4d4a6; color: #2c2316;">✎ edit</button>
             </sc-if>
             <sc-if value="{{ item.showDisplay }}" hint-placeholder-val="{{ true }}">
               <div style="position: absolute; left: -98px; top: 14px; width: 68px; text-align: right; white-space: pre-line; font-size: 16px; line-height: 1.15; color: #b5524a; letter-spacing: 0;">{{ item.gutterDate }}</div>
@@ -393,9 +417,11 @@ class Component extends DCLogic {
   }
 
   loadApiBase() { try { return localStorage.getItem('cp_api_base') || ''; } catch (e) { return ''; } }
+  loadDark() { try { return localStorage.getItem('cp_dark') === '1'; } catch (e) { return false; } }
+  toggleDark = () => this.setState(s => { const d = !s.dark; try { localStorage.setItem('cp_dark', d ? '1' : '0'); } catch (e) {} return { dark: d }; });
   apiUrl(p) { return (this.state.apiBase || '') + p; }
 
-  state = { achievements: this.loadAch(), apiBase: this.loadApiBase(), apiDraft: this.loadApiBase(), serverStatus: 'checking', filter: 'All', mode: 'display', editingId: null, saveState: '', filterOpen: false, sort: 'newest', sortOpen: false, search: '', showHidden: false, entryDisc: {}, entryVid: {}, entryVidOpen: {}, confirmDeleteId: null, lightbox: null, lightboxClosing: false, dnd: null, stamp: false, beast: false, formOpen: false, form: this.blankForm() };
+  state = { achievements: this.loadAch(), dark: this.loadDark(), apiBase: this.loadApiBase(), apiDraft: this.loadApiBase(), serverStatus: 'checking', filter: 'All', mode: 'display', editingId: null, saveState: '', filterOpen: false, sort: 'newest', sortOpen: false, search: '', showHidden: false, entryDisc: {}, entryVid: {}, entryVidOpen: {}, confirmDeleteId: null, lightbox: null, lightboxClosing: false, dnd: null, stamp: false, beast: false, formOpen: false, form: this.blankForm() };
 
   hexToRgba(hex, a) {
     const h = hex.replace('#', '');
@@ -679,6 +705,7 @@ class Component extends DCLogic {
     const all = this.state.achievements;
     const filter = this.state.filter;
     const editMode = this.state.mode === 'edit';
+    const dk = this.state.dark;
     const dnd = this.state.dnd;
     const counted = all.filter(a => editMode || !a.hidden);
 
@@ -724,7 +751,7 @@ class Component extends DCLogic {
       const editing = editMode && this.state.editingId === a.id;
       const tags = (a.categories || []).map(c => {
         const col = this.colorFor(c);
-        return { label: c, style: 'font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 11px;border-radius:2px;color:#3a2f1c;background:' + this.hexToRgba(col, 0.28) + ';border:1px solid ' + this.hexToRgba(col, 0.6) + ';white-space:nowrap;' };
+        return { label: c, style: 'font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 11px;border-radius:2px;color:' + (dk ? '#f3ead2' : '#3a2f1c') + ';background:' + this.hexToRgba(col, dk ? 0.22 : 0.28) + ';border:1px solid ' + this.hexToRgba(col, dk ? 0.55 : 0.6) + ';white-space:nowrap;' };
       });
       const mediaItems = (a.media || []).map((m, i) => {
         const dragging = !!(dnd && dnd.id === a.id && dnd.index === i);
@@ -741,12 +768,12 @@ class Component extends DCLogic {
         return Object.assign({}, base, { isPhoto: false, isVideo: true, node: node, onZoom: () => { if (editing) return; this.setState({ lightbox: vm.isEmbed ? { type: 'embed', embedUrl: vm.embedUrl } : { type: 'file', fileUrl: vm.fileUrl } }); } });
       });
       const isHidden = !!a.hidden;
-      const cardStyle = 'position: relative; padding: 14px 0 30px; border-bottom: 1px solid rgba(120,90,45,0.18);' + (isHidden ? ' opacity: 0.5;' : '');
+      const cardStyle = 'position: relative; padding: 14px 0 30px; border-bottom: 1px solid ' + (dk ? 'rgba(231,173,77,0.16)' : 'rgba(120,90,45,0.18)') + ';' + (isHidden ? ' opacity: 0.5;' : '');
       const eDiscOptions = this.allDisciplines().map(name => {
         const sel = (a.categories || []).indexOf(name) >= 0;
         const col = this.colorFor(name);
         const style = 'cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:0.02em;padding:5px 11px;border-radius:2px;transition:all .15s;'
-          + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:#5a4d35;background:transparent;border:1px solid rgba(120,90,45,0.35);'));
+          + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:' + (dk ? '#c4b693' : '#5a4d35') + ';background:transparent;border:1px solid ' + (dk ? 'rgba(231,173,77,0.3)' : 'rgba(120,90,45,0.35)') + ';'));
         return { label: name, selected: sel, style, onToggle: () => this.toggleEntryDisc(a.id, name) };
       });
       return {
@@ -792,7 +819,7 @@ class Component extends DCLogic {
       const sel = selected.indexOf(name) >= 0;
       const col = this.colorFor(name);
       const style = 'cursor:pointer;font-family:inherit;font-size:14px;letter-spacing:0.02em;padding:6px 12px;border-radius:2px;transition:all .15s;'
-        + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:#5a4d35;background:transparent;border:1px solid rgba(120,90,45,0.35);'));
+        + (sel ? ('color:#fff8ea;background:' + col + ';border:1px solid ' + col + ';') : ('color:' + (dk ? '#c4b693' : '#5a4d35') + ';background:transparent;border:1px solid ' + (dk ? 'rgba(231,173,77,0.3)' : 'rgba(120,90,45,0.35)') + ';'));
       return { label: name, selected: sel, style, onToggle: () => this.toggleDisc(name) };
     });
 
@@ -841,6 +868,12 @@ class Component extends DCLogic {
       setSearch: this.setSearch,
       editMode,
       modeHint,
+      themeAttr: dk ? 'dark' : 'light',
+      deskBg: dk
+        ? 'radial-gradient(150% 110% at 50% -5%, #14100a 0%, #0c0a06 45%, #060503 100%)'
+        : 'radial-gradient(150% 110% at 50% -5%, #211a10 0%, #15110b 45%, #0c0a06 100%)',
+      toggleDark: this.toggleDark,
+      darkLabel: dk ? '☼ light' : '☾ dark',
       apiDraft: this.state.apiDraft,
       setApiDraft: this.setApiDraft,
       connectServer: this.connectServer,
