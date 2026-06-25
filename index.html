@@ -38,6 +38,10 @@
       border-color: rgba(231,173,77,0.24) !important; color-scheme: dark !important;
     }
     [data-theme="dark"] [data-tk="edit-pencil"] { background: rgba(40,32,18,0.8) !important; color: #d3b06a !important; border-color: rgba(231,173,77,0.35) !important; }
+    [data-theme="dark"] [data-tk="tab"] { background: linear-gradient(180deg, #2f2614, #251e10) !important; border-color: rgba(231,173,77,0.32) !important; color: #efe6d0 !important; box-shadow: 0 6px 16px rgba(0,0,0,0.4) !important; }
+    [data-theme="dark"] [data-tk="tab"] span { color: #efe6d0 !important; }
+    [data-theme="dark"] [data-tk="tab"] span:first-child { color: #b09858 !important; }
+    [data-theme="dark"] [data-tk="menu"] { background: linear-gradient(180deg, #2b2315, #211a0f) !important; border-color: rgba(231,173,77,0.35) !important; box-shadow: 0 12px 26px rgba(0,0,0,0.5) !important; }
     @keyframes nbRise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes cpStamp { 0% { opacity: 0; transform: scale(1.9) rotate(-30deg); } 16% { opacity: 0.95; transform: scale(0.94) rotate(-14deg); } 24% { transform: scale(1.05) rotate(-14deg); } 32% { transform: scale(1) rotate(-14deg); } 82% { opacity: 0.92; transform: scale(1) rotate(-14deg); } 100% { opacity: 0; transform: scale(1) rotate(-14deg); } }
     @keyframes cpFlash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
@@ -138,13 +142,13 @@
         <div style="margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <input value="{{ search }}" onInput="{{ setSearch }}" placeholder="Search entries…" style="font-family: inherit; font-size: 16px; color: #2c2316; background: #fbf7ea; border: 1px solid rgba(120,90,45,0.4); border-radius: 2px; padding: 11px 14px; outline: none; color-scheme: light; min-width: 190px; box-shadow: 0 6px 16px rgba(80,60,30,0.18);">
         <div ref="{{ setFilterWrap }}" style="position: relative; z-index: 5;">
-          <button onClick="{{ toggleFilter }}" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
+          <button onClick="{{ toggleFilter }}" data-tk="tab" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
             <span style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a774c; font-family: 'JetBrains Mono', monospace;">Show</span>
             <span style="font-size: 18px; letter-spacing: 0.01em; color: #2a1f10; min-width: 84px; text-align: left;">{{ filter }}</span>
             <span aria-hidden="true" style="font-size: 12px; color: #6f5a2e;">▾</span>
           </button>
           <sc-if value="{{ filterOpen }}" hint-placeholder-val="{{ false }}">
-            <div style="position: absolute; top: 100%; left: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
+            <div data-tk="menu" style="position: absolute; top: 100%; left: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
               <sc-for list="{{ filterMenu }}" as="opt" hint-placeholder-count="3">
                 <button onClick="{{ opt.onClick }}" style="{{ opt.style }}" style-hover="filter: brightness(1.06);">{{ opt.label }}</button>
               </sc-for>
@@ -152,13 +156,13 @@
           </sc-if>
         </div>
           <div ref="{{ setSortWrap }}" style="position: relative; z-index: 5;">
-            <button onClick="{{ toggleSort }}" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
+            <button onClick="{{ toggleSort }}" data-tk="tab" style="position: relative; z-index: 6; display: inline-flex; align-items: center; gap: 9px; background: linear-gradient(180deg, #e4d4a6, #d6c391); color: #2a1f10; padding: 10px 16px; border-radius: 2px; border: 1px solid rgba(150,120,70,0.4); box-shadow: 0 6px 16px rgba(80,60,30,0.3); cursor: pointer; font-family: inherit;">
               <span style="font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a774c; font-family: 'JetBrains Mono', monospace;">Sort</span>
               <span style="font-size: 18px; letter-spacing: 0.01em; color: #2a1f10; min-width: 116px; text-align: left;">{{ sortCurrentLabel }}</span>
               <span aria-hidden="true" style="font-size: 12px; color: #6f5a2e;">▾</span>
             </button>
             <sc-if value="{{ sortOpen }}" hint-placeholder-val="{{ false }}">
-              <div style="position: absolute; top: 100%; right: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
+              <div data-tk="menu" style="position: absolute; top: 100%; right: 0; margin-top: 7px; min-width: 100%; z-index: 8; background: linear-gradient(180deg, #f1e6c8, #e7d9b4); border: 1px solid rgba(150,120,70,0.5); border-radius: 2px; box-shadow: 0 12px 26px rgba(80,60,30,0.34); padding: 5px;">
                 <sc-for list="{{ sortMenu }}" as="opt" hint-placeholder-count="3">
                   <button onClick="{{ opt.onClick }}" style="{{ opt.style }}" style-hover="background: rgba(156,126,58,0.2);">{{ opt.label }}</button>
                 </sc-for>
@@ -743,7 +747,7 @@ class Component extends DCLogic {
     const sortMenu = ['newest', 'oldest', 'title'].map(key => {
       const active = key === sort;
       const style = 'cursor:pointer;display:block;width:100%;text-align:left;font-family:inherit;font-size:17px;letter-spacing:0.01em;padding:8px 13px;border:none;border-radius:2px;transition:background .12s;'
-        + (active ? 'background:#9c7e3a;color:#fdf8ea;' : 'background:transparent;color:#3a2f1c;');
+        + (active ? 'background:#9c7e3a;color:#fdf8ea;' : ('background:transparent;color:' + (dk ? '#e6dabb' : '#3a2f1c') + ';'));
       return { label: sortLabels[key], active, style, onClick: () => this.setState({ sort: key, sortOpen: false }) };
     });
 
@@ -751,7 +755,7 @@ class Component extends DCLogic {
       const editing = editMode && this.state.editingId === a.id;
       const tags = (a.categories || []).map(c => {
         const col = this.colorFor(c);
-        return { label: c, style: 'font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 11px;border-radius:2px;color:' + (dk ? '#f3ead2' : '#3a2f1c') + ';background:' + this.hexToRgba(col, dk ? 0.22 : 0.28) + ';border:1px solid ' + this.hexToRgba(col, dk ? 0.55 : 0.6) + ';white-space:nowrap;' };
+        return { label: c, style: 'font-size:14px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 11px;border-radius:2px;color:' + (dk ? '#241a0c' : '#3a2f1c') + ';background:' + this.hexToRgba(col, dk ? 0.82 : 0.28) + ';border:1px solid ' + this.hexToRgba(col, dk ? 0.9 : 0.6) + ';white-space:nowrap;' };
       });
       const mediaItems = (a.media || []).map((m, i) => {
         const dragging = !!(dnd && dnd.id === a.id && dnd.index === i);
